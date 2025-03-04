@@ -66,40 +66,13 @@
 
             <label>Symptoms</label>
             <div class="checkbox-group">
-                <label><input type="checkbox"> Dizziness</label>
-                <label><input type="checkbox"> Fainting</label>
-                <label><input type="checkbox"> Palpitations</label>
-                <label><input type="checkbox"> Fatigue</label>
-                <label><input type="checkbox"> Headaches</label>
-                <label><input type="checkbox"> Nausea</label>
-                <label><input type="checkbox"> Brain Fog</label>
-                <label><input type="checkbox"> Tremors</label>
-                <label><input type="checkbox"> Chest Pain</label>
-                <label><input type="checkbox"> Shortness of Breath</label>
-                <label><input type="checkbox"> Temperature Fluctuations</label>
-            </div>
-
-            <label>Daily Activity</label>
-            <div class="circle-group">
-                <div class="circle low" onclick="selectCircle(this, 'activity')"></div>
-                <div class="circle moderate" onclick="selectCircle(this, 'activity')"></div>
-                <div class="circle high" onclick="selectCircle(this, 'activity')"></div>
-            </div>
-
-            <label>Water Intake</label>
-            <div class="circle-group" id="waterTracker"></div>
-            
-            <label>Poop Tracker</label>
-            <div class="circle-group" id="poopTracker"></div>
-
-            <label>Stress Levels</label>
-            <div class="checkbox-group">
-                <label><input type="checkbox"> Calm</label>
-                <label><input type="checkbox"> Anxious</label>
-                <label><input type="checkbox"> Stressed</label>
-                <label><input type="checkbox"> Overwhelmed</label>
-                <label><input type="checkbox"> Happy</label>
-                <label><input type="checkbox"> Frustrated</label>
+                <label><input type="checkbox" name="symptoms" value="Dizziness"> Dizziness</label>
+                <label><input type="checkbox" name="symptoms" value="Fainting"> Fainting</label>
+                <label><input type="checkbox" name="symptoms" value="Palpitations"> Palpitations</label>
+                <label><input type="checkbox" name="symptoms" value="Fatigue"> Fatigue</label>
+                <label><input type="checkbox" name="symptoms" value="Headaches"> Headaches</label>
+                <label><input type="checkbox" name="symptoms" value="Nausea"> Nausea</label>
+                <label><input type="checkbox" name="symptoms" value="Brain Fog"> Brain Fog</label>
             </div>
 
             <button type="button" onclick="exportData()">Export Data</button>
@@ -107,24 +80,25 @@
     </div>
 
     <script>
-        function selectCircle(element, group) {
-            let circles = document.querySelectorAll(`.${group}`);
-            circles.forEach(circle => circle.classList.remove('selected'));
-            element.classList.add('selected');
-        }
+        function exportData() {
+            let formData = {};
+            formData.heartRate = document.getElementById('heartRate').value;
+            formData.bp = document.getElementById('bp').value;
 
-        function createTracker(id, count) {
-            let tracker = document.getElementById(id);
-            for (let i = 0; i < count; i++) {
-                let circle = document.createElement('div');
-                circle.classList.add('circle');
-                circle.onclick = function() { this.classList.toggle('selected'); };
-                tracker.appendChild(circle);
-            }
-        }
+            formData.symptoms = [];
+            document.querySelectorAll("input[name='symptoms']:checked").forEach(el => {
+                formData.symptoms.push(el.value);
+            });
 
-        createTracker('waterTracker', 8);
-        createTracker('poopTracker', 3);
+            let dataStr = JSON.stringify(formData, null, 2);
+            let blob = new Blob([dataStr], { type: "text/plain" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "health_tracker_data.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
     </script>
 </body>
 </html>
