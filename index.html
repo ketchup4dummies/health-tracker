@@ -80,17 +80,37 @@
     </div>
 
     <script>
-        function exportData() {
-            let formData = {};
-            formData.heartRate = document.getElementById('heartRate').value;
-            formData.bp = document.getElementById('bp').value;
+        document.addEventListener("DOMContentLoaded", function () {
+            loadFormData();
+        });
 
-            formData.symptoms = [];
+        function saveFormData() {
+            let formData = {
+                heartRate: document.getElementById('heartRate').value,
+                bp: document.getElementById('bp').value,
+                symptoms: []
+            };
             document.querySelectorAll("input[name='symptoms']:checked").forEach(el => {
                 formData.symptoms.push(el.value);
             });
+            localStorage.setItem("healthTrackerData", JSON.stringify(formData));
+        }
 
-            let dataStr = JSON.stringify(formData, null, 2);
+        function loadFormData() {
+            let savedData = localStorage.getItem("healthTrackerData");
+            if (savedData) {
+                let formData = JSON.parse(savedData);
+                document.getElementById('heartRate').value = formData.heartRate || "";
+                document.getElementById('bp').value = formData.bp || "";
+                document.querySelectorAll("input[name='symptoms']").forEach(el => {
+                    el.checked = formData.symptoms.includes(el.value);
+                });
+            }
+        }
+
+        function exportData() {
+            saveFormData();
+            let dataStr = localStorage.getItem("healthTrackerData");
             let blob = new Blob([dataStr], { type: "text/plain" });
             let a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
@@ -99,6 +119,8 @@
             a.click();
             document.body.removeChild(a);
         }
+
+        document.getElementById("healthForm").addEventListener("input", saveFormData);
     </script>
 </body>
 </html>
