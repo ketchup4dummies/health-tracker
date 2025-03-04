@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Health Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atma:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Atma', cursive;
             background: #f9f9f9;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 400px;
@@ -27,15 +30,28 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        button {
-            background: #4a90e2;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            cursor: pointer;
-            border-radius: 5px;
+        .checkbox-group, .circle-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
+        .checkbox-group label, .circle-group label {
+            margin: 5px;
+            font-size: 14px;
+        }
+        .circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 5px;
+            display: inline-block;
+            cursor: pointer;
+            border: 2px solid #ccc;
+        }
+        .circle.selected { border: 2px solid #4a90e2; background: #4a90e2; }
+        .low { background: lightgreen; }
+        .moderate { background: yellow; }
+        .high { background: red; }
     </style>
 </head>
 <body>
@@ -49,68 +65,66 @@
             <input type="text" id="bp">
 
             <label>Symptoms</label>
-            <textarea id="symptoms" placeholder="List symptoms..."></textarea>
+            <div class="checkbox-group">
+                <label><input type="checkbox"> Dizziness</label>
+                <label><input type="checkbox"> Fainting</label>
+                <label><input type="checkbox"> Palpitations</label>
+                <label><input type="checkbox"> Fatigue</label>
+                <label><input type="checkbox"> Headaches</label>
+                <label><input type="checkbox"> Nausea</label>
+                <label><input type="checkbox"> Brain Fog</label>
+                <label><input type="checkbox"> Tremors</label>
+                <label><input type="checkbox"> Chest Pain</label>
+                <label><input type="checkbox"> Shortness of Breath</label>
+                <label><input type="checkbox"> Temperature Fluctuations</label>
+            </div>
 
             <label>Daily Activity</label>
-            <select id="activity">
-                <option>Low</option>
-                <option>Moderate</option>
-                <option>High</option>
-            </select>
+            <div class="circle-group">
+                <div class="circle low" onclick="selectCircle(this, 'activity')"></div>
+                <div class="circle moderate" onclick="selectCircle(this, 'activity')"></div>
+                <div class="circle high" onclick="selectCircle(this, 'activity')"></div>
+            </div>
 
-            <label>Sleep (Hours & Quality)</label>
-            <input type="text" id="sleep">
+            <label>Water Intake</label>
+            <div class="circle-group" id="waterTracker"></div>
+            
+            <label>Poop Tracker</label>
+            <div class="circle-group" id="poopTracker"></div>
 
-            <label>Food/Vitamins/Minerals</label>
-            <textarea id="food"></textarea>
-
-            <label>Hydration</label>
-            <input type="text" id="hydration">
-
-            <label>Stress Level</label>
-            <input type="text" id="stress">
-
-            <label>Medications</label>
-            <textarea id="medications"></textarea>
-
-            <label>Minerals</label>
-            <textarea id="minerals"></textarea>
-
-            <label>Vitamins</label>
-            <textarea id="vitamins"></textarea>
-
-            <label>Period</label>
-            <input type="text" id="period">
-
-            <label>Poop</label>
-            <input type="text" id="poop">
+            <label>Stress Levels</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox"> Calm</label>
+                <label><input type="checkbox"> Anxious</label>
+                <label><input type="checkbox"> Stressed</label>
+                <label><input type="checkbox"> Overwhelmed</label>
+                <label><input type="checkbox"> Happy</label>
+                <label><input type="checkbox"> Frustrated</label>
+            </div>
 
             <button type="button" onclick="exportData()">Export Data</button>
         </form>
     </div>
 
     <script>
-        function exportData() {
-            let data = `Heart Rate: ${document.getElementById('heartRate').value}\n` +
-                       `Blood Pressure: ${document.getElementById('bp').value}\n` +
-                       `Symptoms: ${document.getElementById('symptoms').value}\n` +
-                       `Daily Activity: ${document.getElementById('activity').value}\n` +
-                       `Sleep: ${document.getElementById('sleep').value}\n` +
-                       `Food/Vitamins/Minerals: ${document.getElementById('food').value}\n` +
-                       `Hydration: ${document.getElementById('hydration').value}\n` +
-                       `Stress: ${document.getElementById('stress').value}\n` +
-                       `Medications: ${document.getElementById('medications').value}\n` +
-                       `Minerals: ${document.getElementById('minerals').value}\n` +
-                       `Vitamins: ${document.getElementById('vitamins').value}\n` +
-                       `Period: ${document.getElementById('period').value}\n` +
-                       `Poop: ${document.getElementById('poop').value}\n`;
-
-            let blob = new Blob([data], { type: 'text/plain' });
-            let a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'daily_health_tracker.txt';
-            a.click();
+        function selectCircle(element, group) {
+            let circles = document.querySelectorAll(`.${group}`);
+            circles.forEach(circle => circle.classList.remove('selected'));
+            element.classList.add('selected');
         }
+
+        function createTracker(id, count) {
+            let tracker = document.getElementById(id);
+            for (let i = 0; i < count; i++) {
+                let circle = document.createElement('div');
+                circle.classList.add('circle');
+                circle.onclick = function() { this.classList.toggle('selected'); };
+                tracker.appendChild(circle);
+            }
+        }
+
+        createTracker('waterTracker', 8);
+        createTracker('poopTracker', 3);
     </script>
 </body>
 </html>
