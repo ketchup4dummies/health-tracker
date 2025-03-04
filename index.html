@@ -3,256 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Tracker Widget</title>
+    <title>Daily Health Tracker</title>
     <style>
-        /* CSS Styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background: #f9f9f9;
+            text-align: center;
         }
-
-        .widget-container {
-            background-color: #fff;
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
         }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #666;
-        }
-
-        input[type="number"],
-        input[type="text"],
-        select {
+        h2 { color: #4a90e2; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, select, textarea {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
         }
-
-        input[type="checkbox"],
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-
         button {
-            background-color: #28a745;
+            background: #4a90e2;
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 10px;
             width: 100%;
-        }
-
-        button:hover {
-            background-color: #218838;
+            cursor: pointer;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="widget-container">
-        <h1>Health Tracker</h1>
-        <form id="healthTrackerForm">
-            <!-- Heart Rate -->
-            <div class="section">
-                <h2>HEART RATE</h2>
-                <label for="heartRateAM">AM:</label>
-                <input type="number" id="heartRateAM" name="heartRateAM">
-                <label for="heartRatePM">PM:</label>
-                <input type="number" id="heartRatePM" name="heartRatePM">
-            </div>
+    <div class="container">
+        <h2>Daily Health Tracker</h2>
+        <form id="healthForm">
+            <label>Heart Rate (AM/PM)</label>
+            <input type="text" id="heartRate">
 
-            <!-- Blood Pressure -->
-            <div class="section">
-                <h2>Blood Pressure</h2>
-                <label for="bloodPressureAM">AM:</label>
-                <input type="text" id="bloodPressureAM" name="bloodPressureAM">
-                <label for="bloodPressurePM">PM:</label>
-                <input type="text" id="bloodPressurePM" name="bloodPressurePM">
-            </div>
+            <label>Blood Pressure (AM/PM)</label>
+            <input type="text" id="bp">
 
-            <!-- Symptoms Tracker -->
-            <div class="section">
-                <h2>SYMPTOMS TRACKER</h2>
-                <label><input type="checkbox" name="symptoms" value="Dizziness"> Dizziness/lightheadedness</label>
-                <label><input type="checkbox" name="symptoms" value="Fainting"> Fainting/pre-syncope</label>
-                <label><input type="checkbox" name="symptoms" value="Palpitations"> Palpitations</label>
-                <label><input type="checkbox" name="symptoms" value="Fatigue"> Fatigue</label>
-                <label><input type="checkbox" name="symptoms" value="Headaches"> Headaches</label>
-                <label><input type="checkbox" name="symptoms" value="Nausea"> Nausea</label>
-                <label><input type="checkbox" name="symptoms" value="Brain Fog"> Brain fog/difficulty concentrating</label>
-                <label><input type="checkbox" name="symptoms" value="Tremors"> Tremors</label>
-                <label><input type="checkbox" name="symptoms" value="Chest Pain"> Chest pain</label>
-                <label><input type="checkbox" name="symptoms" value="Shortness of Breath"> Shortness of breath</label>
-                <label><input type="checkbox" name="symptoms" value="Temperature Fluctuations"> Temperature fluctuations (feeling hot or cold)</label>
-            </div>
+            <label>Symptoms</label>
+            <textarea id="symptoms" placeholder="List symptoms..."></textarea>
 
-            <!-- Daily Activity -->
-            <div class="section">
-                <h2>DAILY ACTIVITY</h2>
-                <label><input type="radio" name="activity" value="Low"> Low</label>
-                <label><input type="radio" name="activity" value="Moderate"> Moderate</label>
-                <label><input type="radio" name="activity" value="High"> High</label>
-            </div>
+            <label>Daily Activity</label>
+            <select id="activity">
+                <option>Low</option>
+                <option>Moderate</option>
+                <option>High</option>
+            </select>
 
-            <!-- Sleep -->
-            <div class="section">
-                <h2>SLEEP</h2>
-                <label for="sleepDuration">Duration (hours):</label>
-                <input type="number" id="sleepDuration" name="sleepDuration">
-                <label for="sleepQuality">Quality:</label>
-                <select id="sleepQuality" name="sleepQuality">
-                    <option value="Poor">Poor</option>
-                    <option value="Fair">Fair</option>
-                    <option value="Good">Good</option>
-                    <option value="Excellent">Excellent</option>
-                </select>
-            </div>
+            <label>Sleep (Hours & Quality)</label>
+            <input type="text" id="sleep">
 
-            <!-- Hydration Tracker -->
-            <div class="section">
-                <h2>HYDRATION TRACKER</h2>
-                <label for="hydration">Bottles of water:</label>
-                <input type="number" id="hydration" name="hydration" min="0" max="10">
-            </div>
+            <label>Food/Vitamins/Minerals</label>
+            <textarea id="food"></textarea>
 
-            <!-- Mood Tracker -->
-            <div class="section">
-                <h2>MOOD TRACKER</h2>
-                <label><input type="checkbox" name="mood" value="Happy"> Happy</label>
-                <label><input type="checkbox" name="mood" value="Sad"> Sad</label>
-                <label><input type="checkbox" name="mood" value="Stressed"> Stressed</label>
-                <label><input type="checkbox" name="mood" value="Anxious"> Anxious</label>
-                <label><input type="checkbox" name="mood" value="Sleepy"> Sleepy</label>
-                <label><input type="checkbox" name="mood" value="Annoyed"> Annoyed</label>
-                <label><input type="checkbox" name="mood" value="Mad"> Mad</label>
-                <label><input type="checkbox" name="mood" value="Energetic"> Energetic</label>
-                <label><input type="checkbox" name="mood" value="Funny"> Funny</label>
-            </div>
+            <label>Hydration</label>
+            <input type="text" id="hydration">
 
-            <!-- Daily Medication Tracker -->
-            <div class="section">
-                <h2>DAILY MEDICATION TRACKER</h2>
-                <label for="medication">Sleep Medication:</label>
-                <input type="text" id="medication" name="medication">
-            </div>
+            <label>Stress Level</label>
+            <input type="text" id="stress">
 
-            <!-- Minerals Intake -->
-            <div class="section">
-                <h2>MINERALS INTAKE</h2>
-                <label for="sodium">Sodium:</label>
-                <input type="number" id="sodium" name="sodium">
-                <label for="potassium">Potassium:</label>
-                <input type="number" id="potassium" name="potassium">
-                <label for="magnesium">Magnesium:</label>
-                <input type="number" id="magnesium" name="magnesium">
-                <label for="iron">Iron:</label>
-                <input type="number" id="iron" name="iron">
-            </div>
+            <label>Medications</label>
+            <textarea id="medications"></textarea>
 
-            <!-- Vitamins Intake -->
-            <div class="section">
-                <h2>VITAMINS INTAKE</h2>
-                <label for="vitaminB12">Vitamin B12:</label>
-                <input type="number" id="vitaminB12" name="vitaminB12">
-                <label for="vitaminD">Vitamin D:</label>
-                <input type="number" id="vitaminD" name="vitaminD">
-                <label for="vitaminBComplex">B Vitamins (Complex):</label>
-                <input type="number" id="vitaminBComplex" name="vitaminBComplex">
-                <label for="vitaminC">Vitamin C:</label>
-                <input type="number" id="vitaminC" name="vitaminC">
-            </div>
+            <label>Minerals</label>
+            <textarea id="minerals"></textarea>
 
-            <!-- Menstruation Cycle -->
-            <div class="section">
-                <h2>MENSTRUATION CYCLE</h2>
-                <label for="menstruationCycle">Cycle Day:</label>
-                <input type="number" id="menstruationCycle" name="menstruationCycle">
-            </div>
+            <label>Vitamins</label>
+            <textarea id="vitamins"></textarea>
 
-            <!-- Bowel Movements -->
-            <div class="section">
-                <h2>BOWEL MOVEMENTS</h2>
-                <label for="bowelMovements">Number of Movements:</label>
-                <input type="number" id="bowelMovements" name="bowelMovements">
-            </div>
+            <label>Period</label>
+            <input type="text" id="period">
 
-            <!-- Submit Button -->
-            <button type="submit">Save Data</button>
+            <label>Poop</label>
+            <input type="text" id="poop">
+
+            <button type="button" onclick="exportData()">Export Data</button>
         </form>
     </div>
 
     <script>
-        // JavaScript for Saving Data
-        document.getElementById('healthTrackerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        function exportData() {
+            let data = `Heart Rate: ${document.getElementById('heartRate').value}\n` +
+                       `Blood Pressure: ${document.getElementById('bp').value}\n` +
+                       `Symptoms: ${document.getElementById('symptoms').value}\n` +
+                       `Daily Activity: ${document.getElementById('activity').value}\n` +
+                       `Sleep: ${document.getElementById('sleep').value}\n` +
+                       `Food/Vitamins/Minerals: ${document.getElementById('food').value}\n` +
+                       `Hydration: ${document.getElementById('hydration').value}\n` +
+                       `Stress: ${document.getElementById('stress').value}\n` +
+                       `Medications: ${document.getElementById('medications').value}\n` +
+                       `Minerals: ${document.getElementById('minerals').value}\n` +
+                       `Vitamins: ${document.getElementById('vitamins').value}\n` +
+                       `Period: ${document.getElementById('period').value}\n` +
+                       `Poop: ${document.getElementById('poop').value}\n`;
 
-            const formData = new FormData(event.target);
-            const data = {};
-
-            formData.forEach((value, key) => {
-                if (data[key]) {
-                    if (Array.isArray(data[key])) {
-                        data[key].push(value);
-                    } else {
-                        data[key] = [data[key], value];
-                    }
-                } else {
-                    data[key] = value;
-                }
-            });
-
-            // Save to localStorage
-            localStorage.setItem('healthData', JSON.stringify(data));
-
-            // Optional: Notify the user
-            alert('Data saved locally!');
-        });
-
-        // Load saved data when the page loads
-        window.addEventListener('load', function() {
-            const savedData = JSON.parse(localStorage.getItem('healthData'));
-            if (savedData) {
-                // Populate the form with saved data
-                for (const key in savedData) {
-                    const input = document.querySelector(`[name="${key}"]`);
-                    if (input) {
-                        if (input.type === 'checkbox' || input.type === 'radio') {
-                            input.checked = savedData[key].includes(input.value);
-                        } else {
-                            input.value = savedData[key];
-                        }
-                    }
-                }
-            }
-        });
+            let blob = new Blob([data], { type: 'text/plain' });
+            let a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'daily_health_tracker.txt';
+            a.click();
+        }
     </script>
 </body>
 </html>
